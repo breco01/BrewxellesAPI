@@ -1,0 +1,24 @@
+{
+  "name": "brewxelles-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/breco01/BrewxellesAPI.git"
+  },
+  "keywords": "[\"node\",\"express\",\"api\",\"beers\",\"brussels\",\"brewery\"]",
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/breco01/BrewxellesAPI/issues"
+  },
+  "homepage": "https://github.com/breco01/BrewxellesAPI#readme",
+  "description": "A Node.js & Express API serving data about Brussels-based beers, styles and breweries.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  }
+}
