@@ -1,4 +1,3 @@
-// src/app.js
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -9,6 +8,7 @@ import cors from 'cors';
 
 import breweriesRouter from './routes/breweries.js';
 import beersRouter from './routes/beers.js';
+import authRoutes from './routes/auth.js';
 import { notFound, errorHandler } from './middleware/error.js';
 
 // Swagger
@@ -24,20 +24,18 @@ const __dirname = path.dirname(__filename);
 // ---------- Security & parsing ----------
 app.use(
   helmet({
-    // laat swagger statics correct laden
+      contentSecurityPolicy: false,
     crossOriginResourcePolicy: { policy: 'cross-origin' },
   })
 );
 app.disable('x-powered-by');
 
-// CORS: lees toegelaten origin uit .env (CORS_ORIGIN), of laat alles toe als leeg
 const allowedOrigin = process.env.CORS_ORIGIN;
 app.use(allowedOrigin ? cors({ origin: allowedOrigin }) : cors());
 
-// JSON body limit (klein maar veilig)
+// JSON body limit
 app.use(express.json({ limit: '100kb' }));
 
-// Rate limit op alle /api routes (15 min window, 300 req/IP)
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 300,
@@ -50,6 +48,7 @@ app.use('/api', apiLimiter);
 app.use(express.static(path.join(__dirname, '../public')));
 
 // ---------- API routes ----------
+app.use('/api/auth', authRoutes);
 app.use('/api/breweries', breweriesRouter);
 app.use('/api/beers', beersRouter);
 

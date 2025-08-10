@@ -8,6 +8,7 @@ import {
 } from '../controllers/breweriesController.js';
 import { body, param, query } from 'express-validator';
 import { runValidation } from '../middleware/validate.js';
+import authMiddleware from '../middleware/auth.js';
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.get(
     query('offset').optional().isInt({ min: 0 }).withMessage('offset >= 0'),
     query('sort').optional().isIn(['name', 'city', 'createdAt']).withMessage('invalid sort'),
     query('order').optional().isIn(['asc', 'desc']).withMessage('order asc|desc'),
-    query('q').optional().isString().trim().isLength({ min: 1, max: 100 })
+    query('q').optional().isString().trim().isLength({ min: 1, max: 100 }),
   ],
   runValidation,
   listBreweries
@@ -33,9 +34,10 @@ router.get(
   getBrewery
 );
 
-// CREATE
+// CREATE (protected)
 router.post(
   '/',
+  authMiddleware,
   [
     body('name').isString().trim().isLength({ min: 2, max: 100 }).withMessage('name 2..100'),
     body('city').isString().trim().isLength({ min: 2, max: 100 }).withMessage('city 2..100'),
@@ -43,15 +45,22 @@ router.post(
       .optional()
       .isURL({ protocols: ['https'], require_protocol: true })
       .withMessage('website must be https URL'),
-    body('contactFirstName').optional().isString().trim().isLength({ max: 50 }).matches(/^[^\d]*$/).withMessage('no digits allowed')
+    body('contactFirstName')
+      .optional()
+      .isString()
+      .trim()
+      .isLength({ max: 50 })
+      .matches(/^[^\d]*$/)
+      .withMessage('no digits allowed'),
   ],
   runValidation,
   createBrewery
 );
 
-// UPDATE
+// UPDATE (protected)
 router.put(
   '/:id',
+  authMiddleware,
   [
     param('id').isMongoId().withMessage('Invalid ID format'),
     body('name').optional().isString().trim().isLength({ min: 2, max: 100 }).withMessage('name 2..100'),
@@ -60,15 +69,22 @@ router.put(
       .optional()
       .isURL({ protocols: ['https'], require_protocol: true })
       .withMessage('website must be https URL'),
-    body('contactFirstName').optional().isString().trim().isLength({ max: 50 }).matches(/^[^\d]*$/).withMessage('no digits allowed')
+    body('contactFirstName')
+      .optional()
+      .isString()
+      .trim()
+      .isLength({ max: 50 })
+      .matches(/^[^\d]*$/)
+      .withMessage('no digits allowed'),
   ],
   runValidation,
   updateBrewery
 );
 
-// DELETE
+// DELETE (protected)
 router.delete(
   '/:id',
+  authMiddleware,
   [param('id').isMongoId().withMessage('Invalid ID format')],
   runValidation,
   deleteBrewery

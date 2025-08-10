@@ -8,6 +8,7 @@
   "servers": [
     { "url": "http://localhost:3000", "description": "Local" }
   ],
+  "security": [{ "bearerAuth": [] }],
   "paths": {
     "/api/health": {
       "get": {
@@ -15,7 +16,11 @@
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "type": "object", "properties": { "ok": { "type": "boolean" } } } } }
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "ok": { "type": "boolean" } } }
+              }
+            }
           }
         }
       }
@@ -39,13 +44,16 @@
       },
       "post": {
         "summary": "Create brewery",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BreweryInput" } } }
         },
         "responses": {
           "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Brewery" } } } },
-          "400": { "$ref": "#/components/responses/ValidationError" }
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
         }
       }
     },
@@ -61,19 +69,28 @@
       },
       "put": {
         "summary": "Update brewery",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [{ "$ref": "#/components/parameters/id" }],
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BreweryInputPartial" } } } },
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BreweryInputPartial" } } }
+        },
         "responses": {
           "200": { "description": "Updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Brewery" } } } },
           "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
           "404": { "$ref": "#/components/responses/NotFound" }
         }
       },
       "delete": {
         "summary": "Delete brewery",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [{ "$ref": "#/components/parameters/id" }],
         "responses": {
           "204": { "description": "No Content" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
           "404": { "$ref": "#/components/responses/NotFound" }
         }
       }
@@ -92,22 +109,34 @@
           { "$ref": "#/components/parameters/populate" }
         ],
         "responses": {
-          "200": { "description": "Paged beers", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PagedBeer" } } } }
+          "200": {
+            "description": "Paged beers",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PagedBeer" } } }
+          }
         }
       },
       "post": {
         "summary": "Create beer",
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BeerInput" } } } },
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BeerInput" } } }
+        },
         "responses": {
           "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Beer" } } } },
-          "400": { "$ref": "#/components/responses/ValidationError" }
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
         }
       }
     },
     "/api/beers/{id}": {
       "get": {
         "summary": "Get beer by id",
-        "parameters": [{ "$ref": "#/components/parameters/id" }, { "$ref": "#/components/parameters/populate" }],
+        "parameters": [
+          { "$ref": "#/components/parameters/id" },
+          { "$ref": "#/components/parameters/populate" }
+        ],
         "responses": {
           "200": { "description": "Beer", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Beer" } } } },
           "404": { "$ref": "#/components/responses/NotFound" },
@@ -116,25 +145,42 @@
       },
       "put": {
         "summary": "Update beer",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [{ "$ref": "#/components/parameters/id" }],
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BeerInputPartial" } } } },
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BeerInputPartial" } } }
+        },
         "responses": {
           "200": { "description": "Updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Beer" } } } },
           "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
           "404": { "$ref": "#/components/responses/NotFound" }
         }
       },
       "delete": {
         "summary": "Delete beer",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [{ "$ref": "#/components/parameters/id" }],
         "responses": {
           "204": { "description": "No Content" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
           "404": { "$ref": "#/components/responses/NotFound" }
         }
       }
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Add: Bearer {token}"
+      }
+    },
     "parameters": {
       "id": { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "pattern": "^[a-fA-F0-9]{24}$" } },
       "limit": { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 100 }, "description": "Items per page" },
@@ -156,9 +202,26 @@
       }
     },
     "responses": {
-      "NotFound": { "description": "Not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
-      "BadId": { "description": "Invalid ID format", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
-      "ValidationError": { "description": "Validation error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ValidationError" } } } }
+      "NotFound": {
+        "description": "Not found",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "BadId": {
+        "description": "Invalid ID format",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ValidationError" } } }
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid JWT",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "Forbidden": {
+        "description": "Authenticated but not allowed",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      }
     },
     "schemas": {
       "Brewery": {
