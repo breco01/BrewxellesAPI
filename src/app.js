@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import breweriesRouter from './routes/breweries.js';
 
 const app = express();
 
@@ -11,7 +12,11 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.get('/api/hello', (req, res) => {
+app.use('/api/breweries', breweriesRouter);
+
+app.get('/api/health', (_req, res) => res.json({ ok: true }));
+
+app.get('/api/hello', (_req, res) => {
   res.json({ message: 'Hello from BrewxellesAPI 🍺' });
 });
 

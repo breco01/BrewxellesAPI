@@ -8,5 +8,26 @@
 <body>
   <h1>BrewxellesAPI</h1>
   <p>Welcome to the API! Try <a href="/api/hello">/api/hello</a></p>
+
+  <h2>Endpoints</h2>
+  <h3>Breweries</h3>
+  <ul>
+    <li>GET <code>/api/breweries</code> — list (supports <code>?limit</code>, <code>?offset</code>, <code>?q</code>, <code>?sort</code>, <code>?order</code>)</li>
+    <li>GET <code>/api/breweries/:id</code> — details</li>
+    <li>POST <code>/api/breweries</code> — create</li>
+    <li>PUT <code>/api/breweries/:id</code> — update</li>
+    <li>DELETE <code>/api/breweries/:id</code> — delete</li>
+  </ul>
+
+  <h3>Hello</h3>
+  <ul>
+    <li>GET <code>/api/hello</code></li>
+    <li>GET <code>/api/health</code></li>
+  </ul>
+
+  <p>Query examples:</p>
+  <pre>
+/api/breweries?limit=5&offset=0&q=brussels&sort=name&order=asc
+  </pre>
 </body>
 </html>
