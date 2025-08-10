@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import breweriesRouter from './routes/breweries.js';
+import beersRouter from './routes/beers.js';
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api/breweries', breweriesRouter);
+app.use('/api/beers', beersRouter);
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 

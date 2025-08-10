@@ -3,31 +3,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BrewxellesAPI</title>
+  <title>BrewxellesAPI – Endpoint Overview</title>
+  <meta name="description" content="Documentation for BrewxellesAPI (Node.js + Express + MongoDB)">
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; line-height: 1.5; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    h1 { margin-bottom: .25rem; }
+    small { color: #666; }
+    section { margin: 2rem 0; }
+    ul { margin: .5rem 0 1rem; }
+    .muted { color: #666; }
+    .tag { display: inline-block; padding: .15rem .4rem; border: 1px solid #ddd; border-radius: .25rem; font-size: .85rem; margin-right: .25rem; }
+    .get { border-color: #3b82f6; color: #1d4ed8; }
+    .post { border-color: #10b981; color: #047857; }
+    .put { border-color: #f59e0b; color: #92400e; }
+    .del { border-color: #ef4444; color: #991b1b; }
+    .hint { background: #f9fafb; border: 1px solid #e5e7eb; padding: .75rem; border-radius: .5rem; }
+  </style>
 </head>
 <body>
   <h1>BrewxellesAPI</h1>
-  <p>Welcome to the API! Try <a href="/api/hello">/api/hello</a></p>
+  <small class="muted">Node.js + Express + MongoDB</small>
 
-  <h2>Endpoints</h2>
-  <h3>Breweries</h3>
-  <ul>
-    <li>GET <code>/api/breweries</code> — list (supports <code>?limit</code>, <code>?offset</code>, <code>?q</code>, <code>?sort</code>, <code>?order</code>)</li>
-    <li>GET <code>/api/breweries/:id</code> — details</li>
-    <li>POST <code>/api/breweries</code> — create</li>
-    <li>PUT <code>/api/breweries/:id</code> — update</li>
-    <li>DELETE <code>/api/breweries/:id</code> — delete</li>
-  </ul>
+  <section>
+    <p>Welcome! Quick checks:</p>
+    <ul>
+      <li><a href="/api/hello">GET /api/hello</a> – Hello JSON</li>
+      <li><a href="/api/health">GET /api/health</a> – Healthcheck</li>
+    </ul>
+    <p class="hint"><strong>Tip:</strong> Use query params like <code>?limit=5&amp;offset=0</code> and <code>?q=search</code> to paginate and search.</p>
+  </section>
 
-  <h3>Hello</h3>
-  <ul>
-    <li>GET <code>/api/hello</code></li>
-    <li>GET <code>/api/health</code></li>
-  </ul>
+  <section>
+    <h2>Breweries</h2>
+    <div><span class="tag get">GET</span> <code>/api/breweries</code> – list</div>
+    <ul>
+      <li><strong>Query:</strong> <code>?limit</code> (default 10), <code>?offset</code> (default 0), <code>?q</code> (search in <em>name</em>/<em>city</em>), <code>?sort</code> (<code>name|city|createdAt</code>), <code>?order</code> (<code>asc|desc</code>)</li>
+      <li><strong>Example:</strong> <code>/api/breweries?limit=5&amp;offset=0&amp;q=brussels&amp;sort=name&amp;order=asc</code></li>
+    </ul>
 
-  <p>Query examples:</p>
-  <pre>
-/api/breweries?limit=5&offset=0&q=brussels&sort=name&order=asc
-  </pre>
+    <div><span class="tag get">GET</span> <code>/api/breweries/:id</code> – details</div>
+
+    <div><span class="tag post">POST</span> <code>/api/breweries</code> – create</div>
+    <pre>{
+  "name": "Brasserie de la Mule",
+  "city": "Schaerbeek",
+  "website": "https://www.brasseriedelamule.be",
+  "contactFirstName": "Joel"
+}</pre>
+
+    <div><span class="tag put">PUT</span> <code>/api/breweries/:id</code> – update</div>
+    <pre>{ "city": "Brussels" }</pre>
+
+    <div><span class="tag del">DELETE</span> <code>/api/breweries/:id</code> – delete</div>
+  </section>
+
+  <section>
+    <h2>Beers</h2>
+    <div><span class="tag get">GET</span> <code>/api/beers</code> – list</div>
+    <ul>
+      <li><strong>Query:</strong> <code>?limit</code>, <code>?offset</code>, <code>?q</code> (search in <em>name/description/style</em>), <code>?style</code>, <code>?brewery</code> (by <code>breweryId</code>), <code>?sort</code> (<code>name|abv|createdAt</code>), <code>?order</code> (<code>asc|desc</code>), <code>?populate=true</code></li>
+      <li><strong>Examples:</strong>
+        <div><code>/api/beers?limit=5&amp;offset=0&amp;q=ipa&amp;sort=abv&amp;order=desc&amp;populate=true</code></div>
+        <div><code>/api/beers?style=Gueuze&amp;brewery=&lt;BREWERY_ID&gt;</code></div>
+      </li>
+    </ul>
+
+    <div><span class="tag get">GET</span> <code>/api/beers/:id</code> – details (<code>?populate=true</code> supported)</div>
+
+    <div><span class="tag post">POST</span> <code>/api/beers</code> – create</div>
+    <pre>{
+  "name": "Gueuze 100% Lambic",
+  "breweryId": "&lt;BREWERY_ID&gt;",
+  "style": "Gueuze",
+  "abv": 5.5,
+  "ibu": 10,
+  "description": "Traditional Brussels lambic blend."
+}</pre>
+
+    <div><span class="tag put">PUT</span> <code>/api/beers/:id</code> – update</div>
+    <pre>{ "abv": 6.0 }</pre>
+
+    <div><span class="tag del">DELETE</span> <code>/api/beers/:id</code> – delete</div>
+  </section>
+
+  <section>
+    <h2>Validation (summary)</h2>
+    <ul>
+      <li>Strings required & non-empty where applicable (e.g. <code>name</code>, <code>city</code>, <code>style</code>)</li>
+      <li>Numeric fields must be numbers (e.g. <code>abv</code> 0–20, <code>ibu</code> 0–120)</li>
+      <li><code>contactFirstName</code> (if provided) cannot contain digits</li>
+      <li><code>breweryId</code> must reference an existing Brewery</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Quick curl examples</h2>
+    <pre># Create brewery
+curl -X POST http://localhost:3000/api/breweries \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Cantillon","city":"Brussels","website":"https://www.cantillon.be"}'
+
+# List beers (search + sort + populate)
+curl "http://localhost:3000/api/beers?q=gueuze&sort=abv&order=desc&populate=true"</pre>
+    <p class="muted">On Windows PowerShell, use <code>curl.exe</code> and escape quotes if needed.</p>
+  </section>
 </body>
 </html>
