@@ -1,4 +1,3 @@
-// src/routes/breweries.js
 import { Router } from 'express';
 import {
   listBreweries,
@@ -12,14 +11,15 @@ import { runValidation } from '../middleware/validate.js';
 
 const router = Router();
 
-// LIST: ?limit, ?offset, ?q, ?sort, ?order
+// LIST
 router.get(
   '/',
   [
     query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('limit 1..100'),
     query('offset').optional().isInt({ min: 0 }).withMessage('offset >= 0'),
-    query('sort').optional().isIn(['name', 'city,', 'createdAt', 'name', 'city']).withMessage('invalid sort'),
+    query('sort').optional().isIn(['name', 'city', 'createdAt']).withMessage('invalid sort'),
     query('order').optional().isIn(['asc', 'desc']).withMessage('order asc|desc'),
+    query('q').optional().isString().trim().isLength({ min: 1, max: 100 })
   ],
   runValidation,
   listBreweries
@@ -37,10 +37,13 @@ router.get(
 router.post(
   '/',
   [
-    body('name').isString().trim().notEmpty().withMessage('name required'),
-    body('city').isString().trim().notEmpty().withMessage('city required'),
-    body('website').optional().isURL({ require_protocol: false }).withMessage('invalid website'),
-    body('contactFirstName').optional().matches(/^[^\d]*$/).withMessage('no digits allowed'),
+    body('name').isString().trim().isLength({ min: 2, max: 100 }).withMessage('name 2..100'),
+    body('city').isString().trim().isLength({ min: 2, max: 100 }).withMessage('city 2..100'),
+    body('website')
+      .optional()
+      .isURL({ protocols: ['https'], require_protocol: true })
+      .withMessage('website must be https URL'),
+    body('contactFirstName').optional().isString().trim().isLength({ max: 50 }).matches(/^[^\d]*$/).withMessage('no digits allowed')
   ],
   runValidation,
   createBrewery
@@ -51,10 +54,13 @@ router.put(
   '/:id',
   [
     param('id').isMongoId().withMessage('Invalid ID format'),
-    body('name').optional().isString().trim().notEmpty().withMessage('name must be non-empty'),
-    body('city').optional().isString().trim().notEmpty().withMessage('city must be non-empty'),
-    body('website').optional().isURL({ require_protocol: false }).withMessage('invalid website'),
-    body('contactFirstName').optional().matches(/^[^\d]*$/).withMessage('no digits allowed'),
+    body('name').optional().isString().trim().isLength({ min: 2, max: 100 }).withMessage('name 2..100'),
+    body('city').optional().isString().trim().isLength({ min: 2, max: 100 }).withMessage('city 2..100'),
+    body('website')
+      .optional()
+      .isURL({ protocols: ['https'], require_protocol: true })
+      .withMessage('website must be https URL'),
+    body('contactFirstName').optional().isString().trim().isLength({ max: 50 }).matches(/^[^\d]*$/).withMessage('no digits allowed')
   ],
   runValidation,
   updateBrewery

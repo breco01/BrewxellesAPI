@@ -1,4 +1,3 @@
-// src/routes/beers.js
 import { Router } from 'express';
 import {
   listBeers,
@@ -21,7 +20,9 @@ router.get(
     query('sort').optional().isIn(['name', 'abv', 'createdAt']).withMessage('invalid sort'),
     query('order').optional().isIn(['asc', 'desc']).withMessage('order asc|desc'),
     query('brewery').optional().isMongoId().withMessage('invalid brewery id'),
-    query('populate').optional().isIn(['true', 'false']).withMessage('populate true|false'),
+    query('style').optional().isString().trim().isLength({ min: 1, max: 50 }),
+    query('q').optional().isString().trim().isLength({ min: 1, max: 100 }),
+    query('populate').optional().isIn(['true', 'false']).withMessage('populate true|false')
   ],
   runValidation,
   listBeers
@@ -42,12 +43,12 @@ router.get(
 router.post(
   '/',
   [
-    body('name').isString().trim().notEmpty().withMessage('name required'),
-    body('style').isString().trim().notEmpty().withMessage('style required'),
+    body('name').isString().trim().isLength({ min: 2, max: 100 }).withMessage('name 2..100'),
+    body('style').isString().trim().isLength({ min: 2, max: 50 }).withMessage('style 2..50'),
     body('breweryId').isMongoId().withMessage('breweryId must be a valid id'),
     body('abv').isFloat({ min: 0, max: 20 }).withMessage('abv 0..20'),
     body('ibu').optional().isInt({ min: 0, max: 120 }).withMessage('ibu 0..120'),
-    body('description').optional().isString(),
+    body('description').optional().isString().isLength({ max: 500 })
   ],
   runValidation,
   createBeer
@@ -58,12 +59,12 @@ router.put(
   '/:id',
   [
     param('id').isMongoId().withMessage('Invalid ID format'),
-    body('name').optional().isString().trim().notEmpty().withMessage('name non-empty'),
-    body('style').optional().isString().trim().notEmpty().withMessage('style non-empty'),
+    body('name').optional().isString().trim().isLength({ min: 2, max: 100 }).withMessage('name 2..100'),
+    body('style').optional().isString().trim().isLength({ min: 2, max: 50 }).withMessage('style 2..50'),
     body('breweryId').optional().isMongoId().withMessage('breweryId invalid'),
     body('abv').optional().isFloat({ min: 0, max: 20 }).withMessage('abv 0..20'),
     body('ibu').optional().isInt({ min: 0, max: 120 }).withMessage('ibu 0..120'),
-    body('description').optional().isString(),
+    body('description').optional().isString().isLength({ max: 500 })
   ],
   runValidation,
   updateBeer
