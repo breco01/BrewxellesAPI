@@ -1,0 +1,278 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "BrewxellesAPI",
+    "description": "API for Brussels-based beers & breweries.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://localhost:3000", "description": "Local" }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "ok": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/breweries": {
+      "get": {
+        "summary": "List breweries",
+        "parameters": [
+          { "$ref": "#/components/parameters/limit" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/q" },
+          { "$ref": "#/components/parameters/sortBrewery" },
+          { "$ref": "#/components/parameters/order" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paged breweries",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PagedBrewery" } } }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create brewery",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BreweryInput" } } }
+        },
+        "responses": {
+          "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Brewery" } } } },
+          "400": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    },
+    "/api/breweries/{id}": {
+      "get": {
+        "summary": "Get brewery by id",
+        "parameters": [{ "$ref": "#/components/parameters/id" }],
+        "responses": {
+          "200": { "description": "Brewery", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Brewery" } } } },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "400": { "$ref": "#/components/responses/BadId" }
+        }
+      },
+      "put": {
+        "summary": "Update brewery",
+        "parameters": [{ "$ref": "#/components/parameters/id" }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BreweryInputPartial" } } } },
+        "responses": {
+          "200": { "description": "Updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Brewery" } } } },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "summary": "Delete brewery",
+        "parameters": [{ "$ref": "#/components/parameters/id" }],
+        "responses": {
+          "204": { "description": "No Content" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/beers": {
+      "get": {
+        "summary": "List beers",
+        "parameters": [
+          { "$ref": "#/components/parameters/limit" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/q" },
+          { "$ref": "#/components/parameters/style" },
+          { "$ref": "#/components/parameters/brewery" },
+          { "$ref": "#/components/parameters/sortBeer" },
+          { "$ref": "#/components/parameters/order" },
+          { "$ref": "#/components/parameters/populate" }
+        ],
+        "responses": {
+          "200": { "description": "Paged beers", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PagedBeer" } } } }
+        }
+      },
+      "post": {
+        "summary": "Create beer",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BeerInput" } } } },
+        "responses": {
+          "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Beer" } } } },
+          "400": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    },
+    "/api/beers/{id}": {
+      "get": {
+        "summary": "Get beer by id",
+        "parameters": [{ "$ref": "#/components/parameters/id" }, { "$ref": "#/components/parameters/populate" }],
+        "responses": {
+          "200": { "description": "Beer", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Beer" } } } },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "400": { "$ref": "#/components/responses/BadId" }
+        }
+      },
+      "put": {
+        "summary": "Update beer",
+        "parameters": [{ "$ref": "#/components/parameters/id" }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BeerInputPartial" } } } },
+        "responses": {
+          "200": { "description": "Updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Beer" } } } },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "summary": "Delete beer",
+        "parameters": [{ "$ref": "#/components/parameters/id" }],
+        "responses": {
+          "204": { "description": "No Content" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "id": { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "pattern": "^[a-fA-F0-9]{24}$" } },
+      "limit": { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 100 }, "description": "Items per page" },
+      "offset": { "name": "offset", "in": "query", "schema": { "type": "integer", "minimum": 0 }, "description": "Items to skip" },
+      "order": { "name": "order", "in": "query", "schema": { "type": "string", "enum": ["asc", "desc"] } },
+      "q": { "name": "q", "in": "query", "schema": { "type": "string" }, "description": "Search term" },
+      "style": { "name": "style", "in": "query", "schema": { "type": "string" } },
+      "brewery": { "name": "brewery", "in": "query", "schema": { "type": "string", "pattern": "^[a-fA-F0-9]{24}$" } },
+      "populate": { "name": "populate", "in": "query", "schema": { "type": "string", "enum": ["true", "false"] } },
+      "sortBrewery": {
+        "name": "sort",
+        "in": "query",
+        "schema": { "type": "string", "enum": ["name", "city", "createdAt"] }
+      },
+      "sortBeer": {
+        "name": "sort",
+        "in": "query",
+        "schema": { "type": "string", "enum": ["name", "abv", "createdAt"] }
+      }
+    },
+    "responses": {
+      "NotFound": { "description": "Not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "BadId": { "description": "Invalid ID format", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "ValidationError": { "description": "Validation error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ValidationError" } } } }
+    },
+    "schemas": {
+      "Brewery": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "name": { "type": "string" },
+          "city": { "type": "string" },
+          "website": { "type": "string" },
+          "contactFirstName": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "BreweryInput": {
+        "type": "object",
+        "required": ["name", "city"],
+        "properties": {
+          "name": { "type": "string" },
+          "city": { "type": "string" },
+          "website": { "type": "string" },
+          "contactFirstName": { "type": "string" }
+        }
+      },
+      "BreweryInputPartial": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "city": { "type": "string" },
+          "website": { "type": "string" },
+          "contactFirstName": { "type": "string" }
+        }
+      },
+      "Beer": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "name": { "type": "string" },
+          "breweryId": { "type": "string" },
+          "style": { "type": "string" },
+          "abv": { "type": "number" },
+          "ibu": { "type": "integer" },
+          "description": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "BeerInput": {
+        "type": "object",
+        "required": ["name", "breweryId", "style", "abv"],
+        "properties": {
+          "name": { "type": "string" },
+          "breweryId": { "type": "string" },
+          "style": { "type": "string" },
+          "abv": { "type": "number" },
+          "ibu": { "type": "integer" },
+          "description": { "type": "string" }
+        }
+      },
+      "BeerInputPartial": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "breweryId": { "type": "string" },
+          "style": { "type": "string" },
+          "abv": { "type": "number" },
+          "ibu": { "type": "integer" },
+          "description": { "type": "string" }
+        }
+      },
+      "PagedBrewery": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer" },
+          "limit": { "type": "integer" },
+          "offset": { "type": "integer" },
+          "sort": { "type": "string" },
+          "order": { "type": "string" },
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/Brewery" } }
+        }
+      },
+      "PagedBeer": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer" },
+          "limit": { "type": "integer" },
+          "offset": { "type": "integer" },
+          "sort": { "type": "string" },
+          "order": { "type": "string" },
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/Beer" } }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": { "type": "string" },
+                "msg": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

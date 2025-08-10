@@ -1,26 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BrewxellesAPI – Endpoint Overview</title>
   <meta name="description" content="Documentation for BrewxellesAPI (Node.js + Express + MongoDB)">
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; line-height: 1.5; }
-    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    h1 { margin-bottom: .25rem; }
-    small { color: #666; }
-    section { margin: 2rem 0; }
-    ul { margin: .5rem 0 1rem; }
-    .muted { color: #666; }
-    .tag { display: inline-block; padding: .15rem .4rem; border: 1px solid #ddd; border-radius: .25rem; font-size: .85rem; margin-right: .25rem; }
-    .get { border-color: #3b82f6; color: #1d4ed8; }
-    .post { border-color: #10b981; color: #047857; }
-    .put { border-color: #f59e0b; color: #92400e; }
-    .del { border-color: #ef4444; color: #991b1b; }
-    .hint { background: #f9fafb; border: 1px solid #e5e7eb; padding: .75rem; border-radius: .5rem; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin: 2rem;
+      line-height: 1.5;
+    }
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    h1 {
+      margin-bottom: .25rem;
+    }
+
+    small {
+      color: #666;
+    }
+
+    section {
+      margin: 2rem 0;
+    }
+
+    ul {
+      margin: .5rem 0 1rem;
+    }
+
+    .muted {
+      color: #666;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: .15rem .4rem;
+      border: 1px solid #ddd;
+      border-radius: .25rem;
+      font-size: .85rem;
+      margin-right: .25rem;
+    }
+
+    .get {
+      border-color: #3b82f6;
+      color: #1d4ed8;
+    }
+
+    .post {
+      border-color: #10b981;
+      color: #047857;
+    }
+
+    .put {
+      border-color: #f59e0b;
+      color: #92400e;
+    }
+
+    .del {
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+
+    .hint {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: .75rem;
+      border-radius: .5rem;
+    }
   </style>
 </head>
+
 <body>
   <h1>BrewxellesAPI</h1>
   <small class="muted">Node.js + Express + MongoDB</small>
@@ -30,16 +85,25 @@
     <ul>
       <li><a href="/api/hello">GET /api/hello</a> – Hello JSON</li>
       <li><a href="/api/health">GET /api/health</a> – Healthcheck</li>
+      <li><a href="/docs">Swagger UI (/docs)</a> – interactive API documentation</li>
     </ul>
-    <p class="hint"><strong>Tip:</strong> Use query params like <code>?limit=5&amp;offset=0</code> and <code>?q=search</code> to paginate and search.</p>
+    <p class="hint"><strong>Tip:</strong> Use query params like <code>?limit=5&amp;offset=0</code>,
+      <code>?q=search</code>, and sorting with <code>?sort=field&amp;order=asc|desc</code>.
+    </p>
   </section>
 
   <section>
     <h2>Breweries</h2>
     <div><span class="tag get">GET</span> <code>/api/breweries</code> – list</div>
     <ul>
-      <li><strong>Query:</strong> <code>?limit</code> (default 10), <code>?offset</code> (default 0), <code>?q</code> (search in <em>name</em>/<em>city</em>), <code>?sort</code> (<code>name|city|createdAt</code>), <code>?order</code> (<code>asc|desc</code>)</li>
-      <li><strong>Example:</strong> <code>/api/breweries?limit=5&amp;offset=0&amp;q=brussels&amp;sort=name&amp;order=asc</code></li>
+      <li><strong>Query:</strong> <code>?limit</code> (default 10), <code>?offset</code> (default 0),
+        <code>?q</code> (search in <em>name</em>/<em>city</em>),
+        <code>?sort</code> (<code>name|city|createdAt</code>),
+        <code>?order</code> (<code>asc|desc</code>)
+      </li>
+      <li><strong>Example:</strong>
+        <code>/api/breweries?limit=5&amp;offset=0&amp;q=brussels&amp;sort=name&amp;order=asc</code>
+      </li>
     </ul>
 
     <div><span class="tag get">GET</span> <code>/api/breweries/:id</code> – details</div>
@@ -62,14 +126,21 @@
     <h2>Beers</h2>
     <div><span class="tag get">GET</span> <code>/api/beers</code> – list</div>
     <ul>
-      <li><strong>Query:</strong> <code>?limit</code>, <code>?offset</code>, <code>?q</code> (search in <em>name/description/style</em>), <code>?style</code>, <code>?brewery</code> (by <code>breweryId</code>), <code>?sort</code> (<code>name|abv|createdAt</code>), <code>?order</code> (<code>asc|desc</code>), <code>?populate=true</code></li>
+      <li><strong>Query:</strong> <code>?limit</code>, <code>?offset</code>,
+        <code>?q</code> (search in <em>name/description/style</em>),
+        <code>?style</code>, <code>?brewery</code> (by <code>breweryId</code>),
+        <code>?sort</code> (<code>name|abv|createdAt</code>),
+        <code>?order</code> (<code>asc|desc</code>),
+        <code>?populate=true</code>
+      </li>
       <li><strong>Examples:</strong>
         <div><code>/api/beers?limit=5&amp;offset=0&amp;q=ipa&amp;sort=abv&amp;order=desc&amp;populate=true</code></div>
         <div><code>/api/beers?style=Gueuze&amp;brewery=&lt;BREWERY_ID&gt;</code></div>
       </li>
     </ul>
 
-    <div><span class="tag get">GET</span> <code>/api/beers/:id</code> – details (<code>?populate=true</code> supported)</div>
+    <div><span class="tag get">GET</span> <code>/api/beers/:id</code> – details (<code>?populate=true</code> supported)
+    </div>
 
     <div><span class="tag post">POST</span> <code>/api/beers</code> – create</div>
     <pre>{
@@ -90,10 +161,25 @@
   <section>
     <h2>Validation (summary)</h2>
     <ul>
-      <li>Strings required & non-empty where applicable (e.g. <code>name</code>, <code>city</code>, <code>style</code>)</li>
-      <li>Numeric fields must be numbers (e.g. <code>abv</code> 0–20, <code>ibu</code> 0–120)</li>
-      <li><code>contactFirstName</code> (if provided) cannot contain digits</li>
-      <li><code>breweryId</code> must reference an existing Brewery</li>
+      <li><strong>Breweries</strong>:
+        <ul>
+          <li><code>name</code>, <code>city</code>: strings, length <code>2..100</code>, required</li>
+          <li><code>website</code>: <strong>HTTPS</strong> URL (e.g. <code>https://example.com</code>)</li>
+          <li><code>contactFirstName</code>: optional, no digits, max <code>50</code> chars</li>
+        </ul>
+      </li>
+      <li><strong>Beers</strong>:
+        <ul>
+          <li><code>name</code>: string <code>2..100</code>, required</li>
+          <li><code>style</code>: string <code>2..50</code>, required</li>
+          <li><code>breweryId</code>: must reference an existing Brewery (MongoDB ObjectId)</li>
+          <li><code>abv</code>: number <code>0..20</code> (required), <code>ibu</code>: integer <code>0..120</code>
+            (optional)</li>
+          <li><code>description</code>: optional, max <code>500</code> chars</li>
+        </ul>
+      </li>
+      <li>Query params: <code>sort</code> and <code>order</code> are validated; <code>populate</code> accepts
+        <code>true|false</code>.</li>
     </ul>
   </section>
 
@@ -106,7 +192,17 @@ curl -X POST http://localhost:3000/api/breweries \
 
 # List beers (search + sort + populate)
 curl "http://localhost:3000/api/beers?q=gueuze&sort=abv&order=desc&populate=true"</pre>
-    <p class="muted">On Windows PowerShell, use <code>curl.exe</code> and escape quotes if needed.</p>
+    <p class="muted">On Windows PowerShell, use <code>Invoke-RestMethod</code> or <code>curl.exe</code> and escape
+      quotes if needed.</p>
+  </section>
+
+  <section>
+    <h2>Docs &amp; Notes</h2>
+    <ul>
+      <li>📖 Interactive docs: <a href="/docs">/docs</a> (Swagger UI)</li>
+      <li>See the repository <code>README.md</code> for setup, seeding, and testing instructions.</li>
+    </ul>
   </section>
 </body>
+
 </html>
