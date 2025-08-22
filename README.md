@@ -27,7 +27,7 @@ geval voer je de volgende commando's uit onder de assumptie dat de naam van de
 repository nog steeds "BrewxellesAPI" is:
 
 ```bash
-git clone https://github.com/<jouw-gebruikersnaam>/brewxelles-api.git
+git clone https://github.com/<jouw-gebruikersnaam>/BrewxellesAPI.git
 cd BrewxellesAPI
 ```
 
