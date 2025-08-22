@@ -8,11 +8,27 @@ API voor Brussels-based bieren en brouwerijen. Ondersteunt **CRUD**-operaties vo
 
 Volg onderstaande stappen om het project lokaal te draaien.
 
-### 1. Repository clonen
+### 1. Repository clonen of forken.
+
+Voraleer je het project lokaal kunt draainen moet je het project ofwel
+rechtstreeks clonen ofwel eerst forken en dan clonen.
+
+Indien je het
+rechtstreeks cloont voer je de volgende commando's uit:
 
 ```bash
-git clone https://github.com/<jouw-gebruikersnaam>/brewxelles-api.git
-cd brewxelles-api
+git clone https://github.com/breco01/BrewxellesAPI
+cd BrewxellesAPI
+```
+
+Indien je het eerst forkt dan zal de geforkte repository zich onder je eigen
+gebruikersnaam bevinden met de naam dat je de repository hebt gegeven. In dit
+geval voer je de volgende commando's uit onder de assumptie dat de naam van de
+repository nog steeds "BrewxellesAPI" is:
+
+```bash
+git clone https://github.com/<jouw-gebruikersnaam>/BrewxellesAPI.git
+cd BrewxellesAPI
 ```
 
 ### 2. Dependencies installeren
@@ -125,19 +141,19 @@ Authorization: Bearer <token>
 
 ## GEBRUIKTE TECHNOLOGIEËN & BRONNEN
 
-| Technologie / tool     | Beschrijving                  | Bron                                                                                             |
-| ---------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------ |
-| **Node.js**            | JavaScript runtime            | [https://nodejs.org](https://youtu.be/Oe421EPjeBE?si=ACc8pwR7hUpED39u)                                                         |
+| Technologie / tool     | Beschrijving                  | Bron                                                                                                                        |
+| ---------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **Node.js**            | JavaScript runtime            | [https://nodejs.org](https://youtu.be/Oe421EPjeBE?si=ACc8pwR7hUpED39u)                                                      |
 | **Express**            | Web framework                 | [https://expressjs.com](https://youtu.be/Oe421EPjeBE?si=ACc8pwR7hUpED39u)                                                   |
-| **MongoDB**            | NoSQL database                | [https://mongodb.com](https://www.mongodb.com/developer/languages/javascript/getting-started-with-mongodb-and-mongoose/)                                                       |
-| **Mongoose**           | ODM voor MongoDB              | [https://mongoosejs.com](https://www.mongodb.com/developer/languages/javascript/getting-started-with-mongodb-and-mongoose/)                                                 |
-| **JWT (jsonwebtoken)** | Authenticatie met tokens      | [https://github.com/auth0/node-jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)         |
-| **bcrypt**             | Password hashing              | [https://github.com/kelektiv/node.bcrypt.js](https://github.com/kelektiv/node.bcrypt.js)         |
-| **Swagger UI**         | API-documentatie              | [https://swagger.io/tools/swagger-ui/](https://swagger.io/tools/swagger-ui/)                     |
-| **Helmet**             | Security headers              | [https://helmetjs.github.io/](https://helmetjs.github.io/)                                       |
-| **CORS**               | Cross-Origin Resource Sharing | [https://github.com/expressjs/cors](https://github.com/expressjs/cors)                           |
-| **express-rate-limit** | Rate limiting middleware      | [https://github.com/nfriedly/express-rate-limit](https://github.com/nfriedly/express-rate-limit) |
-| **Nodemon**            | Dev-server auto-reload        | [https://nodemon.io](https://nodemon.io)                                                         |
+| **MongoDB**            | NoSQL database                | [https://mongodb.com](https://www.mongodb.com/developer/languages/javascript/getting-started-with-mongodb-and-mongoose/)    |
+| **Mongoose**           | ODM voor MongoDB              | [https://mongoosejs.com](https://www.mongodb.com/developer/languages/javascript/getting-started-with-mongodb-and-mongoose/) |
+| **JWT (jsonwebtoken)** | Authenticatie met tokens      | [https://github.com/auth0/node-jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)                                    |
+| **bcrypt**             | Password hashing              | [https://github.com/kelektiv/node.bcrypt.js](https://github.com/kelektiv/node.bcrypt.js)                                    |
+| **Swagger UI**         | API-documentatie              | [https://swagger.io/tools/swagger-ui/](https://swagger.io/tools/swagger-ui/)                                                |
+| **Helmet**             | Security headers              | [https://helmetjs.github.io/](https://helmetjs.github.io/)                                                                  |
+| **CORS**               | Cross-Origin Resource Sharing | [https://github.com/expressjs/cors](https://github.com/expressjs/cors)                                                      |
+| **express-rate-limit** | Rate limiting middleware      | [https://github.com/nfriedly/express-rate-limit](https://github.com/nfriedly/express-rate-limit)                            |
+| **Nodemon**            | Dev-server auto-reload        | [https://nodemon.io](https://nodemon.io)                                                                                    |
 
 ---
 
@@ -153,4 +169,3 @@ Authorization: Bearer <token>
 ## LICENTIE
 
 MIT License © 2025 Brent Cornet
-
